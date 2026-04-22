@@ -1,17 +1,19 @@
 /**
  * Node.js CLI Calculator
  *
- * Supports four basic arithmetic operations:
+ * Supports five arithmetic operations:
  *   - add      : Addition (+)
  *   - subtract : Subtraction (-)
  *   - multiply : Multiplication (×)
  *   - divide   : Division (÷) with division-by-zero handling
+ *   - modulo   : Remainder (%) with division-by-zero handling
  *
  * Usage:
  *   node calculator.js add 5 3        # => 8
  *   node calculator.js subtract 9 4   # => 5
  *   node calculator.js multiply 6 7   # => 42
  *   node calculator.js divide 10 2    # => 5
+ *   node calculator.js modulo 10 3    # => 1
  */
 
 const [,, operation, arg1, arg2] = process.argv;
@@ -42,7 +44,15 @@ function divide(a, b) {
   return a / b;
 }
 
-module.exports = { add, subtract, multiply, divide };
+/** Modulo: returns the remainder of a divided by b; errors on divide-by-zero */
+function modulo(a, b) {
+  if (b === 0) {
+    throw new Error('Division by zero is not allowed.');
+  }
+  return a % b;
+}
+
+module.exports = { add, subtract, multiply, divide, modulo };
 
 // Only run CLI logic when executed directly (not when imported by tests)
 if (require.main === module) {
@@ -70,8 +80,16 @@ if (require.main === module) {
         process.exit(1);
       }
       break;
+    case 'modulo':
+      try {
+        result = modulo(a, b);
+      } catch (err) {
+        console.error(`Error: ${err.message}`);
+        process.exit(1);
+      }
+      break;
     default:
-      console.error(`Unknown operation: "${operation}". Use add, subtract, multiply, or divide.`);
+      console.error(`Unknown operation: "${operation}". Use add, subtract, multiply, divide, or modulo.`);
       process.exit(1);
   }
 

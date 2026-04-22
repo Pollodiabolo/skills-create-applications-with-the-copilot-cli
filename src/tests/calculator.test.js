@@ -10,7 +10,7 @@
  * Includes edge cases: division by zero, negatives, decimals, identity values.
  */
 
-const { add, subtract, multiply, divide } = require('../calculator');
+const { add, subtract, multiply, divide, modulo } = require('../calculator');
 
 // ─── Addition (+) ────────────────────────────────────────────────────────────
 describe('add', () => {
@@ -64,5 +64,23 @@ describe('divide', () => {
   });
   test('dividing zero by zero throws an error', () => {
     expect(() => divide(0, 0)).toThrow('Division by zero is not allowed.');
+  });
+});
+
+// ─── Modulo (%) ──────────────────────────────────────────────────────────────
+describe('modulo', () => {
+  test('10 % 3 = 1', () => expect(modulo(10, 3)).toBe(1));
+  test('10 % 2 = 0 (even number)', () => expect(modulo(10, 2)).toBe(0));
+  test('7 % 4 = 3', () => expect(modulo(7, 4)).toBe(3));
+  test('0 % 5 = 0', () => expect(modulo(0, 5)).toBe(0));
+  test('modulo by one always returns zero', () => expect(modulo(99, 1)).toBe(0));
+  test('negative dividend: -7 % 3 = -1', () => expect(modulo(-7, 3)).toBe(-1));
+  test('negative divisor: 7 % -3 = 1', () => expect(modulo(7, -3)).toBe(1));
+  test('both negative: -7 % -3 = -1', () => expect(modulo(-7, -3)).toBe(-1));
+  test('modulo by zero throws an error', () => {
+    expect(() => modulo(5, 0)).toThrow('Division by zero is not allowed.');
+  });
+  test('modulo zero by zero throws an error', () => {
+    expect(() => modulo(0, 0)).toThrow('Division by zero is not allowed.');
   });
 });
